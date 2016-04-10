@@ -51,6 +51,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'brakeman', :require => false
   gem 'web-console', '~> 2.0' # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'sdoc', '~> 0.4.0', group: :doc   # bundle exec rake doc:rails generates the API under doc/api.
   # gem 'spring'

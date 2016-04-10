@@ -86,9 +86,14 @@ unicorn, the application server.
 - `rake -T metrics`
 - cron job updates nightly, see config/schedule.rb
 
+### Brakeman: Security checker
+
+- outputs to "public/metrics/brakeman"
+- https://github.com/presidentbeef/brakeman
+
 ### Sandi Metz rules
 
-- sandi_meter outputs to "/metrics/sandi_meter"
+- sandi_meter outputs to "public/metrics/sandi_meter"
 - https://github.com/makaroni4/sandi_meter
 
 ## NewRelic

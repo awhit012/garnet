@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   resources :courses
   resources :locations
 
+  get "/metrics", to: "metrics#index", as: 'metrics'
+
   root to: "dashboards#to_do"
 
   get  '/sign_in',  to: 'sessions#new',     as: :sign_in

@@ -1,0 +1,9 @@
+<h1>Metrics</h1>
+
+<ul id="metrics">
+<% @metrics.each do |metric_name| %>
+  <li>
+    <%= link_to metric_name, "#{metrics_path}/#{metric_name}" %>
+  </li>
+<% end %>
+</ul>

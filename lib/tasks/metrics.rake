@@ -4,18 +4,41 @@ namespace :metrics do
     logger = Logger.new(Rails.root.join("log/metrics.log"), "monthly")
   end
 
+  def metrics_path
+    Rails.root.join('public/metrics/')
+  end
+
+
   desc "Generate all metrics"
   task :generate do
     # expects all metrics to have :generate tasks
-    metrics = %w(sandi_meter)
-    metrics.each do |metric|
-      metric_rake_task = "metrics:#{metric}:generate"
+    Metric.names.each do |metric_name|
+      metric_rake_task = "metrics:#{metric_name}:generate"
       Rake::Task[metric_rake_task].invoke
     end
   end
 
+  namespace :brakeman do
+    brakeman_path = metrics_path.join('brakeman')
+
+    desc "Clean html pages at #{brakeman_path}"
+    task :clean do
+      message = "Removing brakeman pages #{brakeman_path}"
+      logger.info message
+      # puts message
+      FileUtils.rm_rf(brakeman_path)
+    end
+
+    desc "Generates/updates brakeman html report"
+    task :generate do
+      FileUtils.mkdir(brakeman_path)
+      output_file = brakeman_path.join('index.html')
+      `brakeman --output #{output_file}`
+    end
+  end
+
   namespace :sandi_meter do
-    sandi_pages_path = Rails.root.join('public/metrics/sandi_meter')
+    sandi_pages_path = metrics_path.join('sandi_meter')
 
     desc "Generates/updates html pages for /metrics/sandi_meter"
     task :generate do
