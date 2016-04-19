@@ -30,10 +30,17 @@ namespace :metrics do
     end
 
     desc "Generates/updates brakeman html report"
-    task :generate do
-      FileUtils.mkdir(brakeman_path)
+    task :generate, [:verbose] do |t, args|
+      args.with_defaults(verbose: 'true')
+      verbose = (args[:verbose] == 'true') ? true : false
+
+      FileUtils.mkdir(brakeman_path) unless Dir.exists?(brakeman_path)
       output_file = brakeman_path.join('index.html')
-      `brakeman --output #{output_file}`
+      cmd = "brakeman --output #{output_file}"
+      cmd += " --quiet" unless verbose
+
+      logger.info "Generating brakeman: #{cmd}"
+      `#{cmd}`
     end
   end
 
@@ -41,12 +48,17 @@ namespace :metrics do
     sandi_pages_path = metrics_path.join('sandi_meter')
 
     desc "Generates/updates html pages for /metrics/sandi_meter"
-    task :generate do
+    task :generate, [:verbose] do |t, args|
+      args.with_defaults(verbose: 'true')
+      verbose = (args[:verbose] == 'true') ? true : false
+
       # mms: using CLI because I could not find easy way to access anaylzer, for rails -> html, via code
-      message = "Generating sandi_meter metrics at #{sandi_pages_path}"
+      cmd = %Q(sandi_meter --quiet --graph --output-path "#{sandi_pages_path}")
+      # cmd += " --details" if verbose
+      message = "Generating sandi_meter metrics: #{cmd}"
       logger.info message
-      # puts message
-      `sandi_meter --graph --quiet --output-path "#{sandi_pages_path}"`
+      puts message if verbose
+      `#{cmd}`
 
       # update assets for rails public dir
       index_file = sandi_pages_path.join('index.html')

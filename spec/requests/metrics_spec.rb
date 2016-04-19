@@ -17,7 +17,7 @@ RSpec.describe "Metrics", :type => :request do
       # clean up
       Rake::Task['metrics:brakeman:clean'].invoke
       # generate
-      Rake::Task['metrics:brakeman:generate'].invoke
+      Rake::Task['metrics:brakeman:generate'].invoke('false')
     end
 
     it "requires un-authenticated access to endpoint" do
@@ -39,7 +39,7 @@ RSpec.describe "Metrics", :type => :request do
       # clean up
       Rake::Task['metrics:sandi_meter:clean'].invoke
       # generate
-      Rake::Task['metrics:sandi_meter:generate'].invoke
+      Rake::Task['metrics:sandi_meter:generate'].invoke('false')
     end
 
     it "requires un-authenticated access to endpoint" do
