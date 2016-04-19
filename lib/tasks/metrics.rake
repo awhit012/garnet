@@ -1,3 +1,4 @@
+require_relative "../../app/models/metric"
 namespace :metrics do
   def logger
     require 'logger'
@@ -40,6 +41,7 @@ namespace :metrics do
       cmd += " --quiet" unless verbose
 
       logger.info "Generating brakeman: #{cmd}"
+      puts "Generating brakeman..." if verbose
       `#{cmd}`
     end
   end
