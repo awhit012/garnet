@@ -464,3 +464,9 @@ table{
     display:block;
   }
 }
+
+.folded {
+  &:after{
+    transform:rotateZ(90deg);
+  }
+}

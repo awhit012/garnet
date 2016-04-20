@@ -30,7 +30,8 @@ $(".fold").on("click", function(e){
 
 $(".js-fold-without-anchor").on("click", function(e){
   e.preventDefault();
-  $(this).siblings("div").show()
+  $(this).toggleClass('folded');
+  $(this).siblings("div").toggle();
 });
 
 var hash = window.location.hash
