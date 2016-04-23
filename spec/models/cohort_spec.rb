@@ -1,7 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Cohort do
-  let(:test_cohort) { Cohort.create!(name: "Test Cohort", start_date: DateTime.parse("1969-07-20 08:34:59"), end_date: DateTime.parse("1969-07-27 08:59:59"))}
+  subject(:test_cohort) { Cohort.create!(
+    name: "Test Cohort",
+    start_date: DateTime.parse("1969-07-20 08:34:59"),
+    end_date: DateTime.parse("1969-07-27 08:59:59")
+    )
+  }
   let(:start_time) { 9 }
   let(:time_zone) {"Eastern Time (US & Canada)"}
   describe "#generate_events" do
@@ -34,6 +39,32 @@ RSpec.describe Cohort do
       test_cohort.generate_events(start_time, time_zone)
       num_events_after_running_method_again = test_cohort.events.length
       expect(num_events_before_running_method_again).to eq(num_events_after_running_method_again)
+    end
+  end
+
+  describe "#instructors & #students" do
+    let(:test_instructor) { FactoryGirl.create(:user, username: "TestInstructor1") }
+    let(:test_student1) { FactoryGirl.create(:user, username: "TestStudent1") }
+    let(:test_student2) { FactoryGirl.create(:user, username: "TestStudent2") }
+
+    before(:each) do
+      # add instructors and students
+      test_cohort.memberships.create!(user: test_student1)
+      test_cohort.memberships.create!(user: test_student2)
+
+      test_cohort.memberships.create!(is_admin: true, user: test_instructor)
+    end
+
+    it "should extract instructors from all members" do
+      expect(test_cohort.instructors).to be_a(ActiveRecord::Associations::CollectionProxy)
+      expect(test_cohort.instructors.count).to eq(1)
+      expect(test_cohort.instructors.first).to eq(test_instructor)
+    end
+
+    it "should extract students from all members" do
+      expect(test_cohort.students).to be_a(ActiveRecord::Associations::CollectionProxy)
+      expect(test_cohort.students.count).to eq(2)
+      expect(test_cohort.students.first).to eq(test_student1)
     end
   end
 end
