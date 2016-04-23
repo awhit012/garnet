@@ -1,0 +1,23 @@
+.fold, .fold-without-anchor{
+  &:after{
+    display:inline-block;
+    transition:transform 0.2s;
+    transform:rotateZ(0deg);
+    content:"\025B8";
+  }
+  &~div{
+    display:none;
+  }
+  &:target:after{
+    transform:rotateZ(90deg);
+  }
+  &:target~div{
+    display:block;
+  }
+}
+
+.folded {
+  &:after{
+    transform:rotateZ(90deg);
+  }
+}
