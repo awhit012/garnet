@@ -2,9 +2,8 @@
   <%= link_to "Manage Cohort", manage_cohort_path(@cohort), class: :button %>
 <% end %>
 
-<section>
-  <h3 id="members"><a href="#members">Members</a></h3>
-  <div>
+<%= foldable_section_tag("Members", class: 'unfolded') do %>
+  <%= section_content_tag do %>
     <h4>Roster</h4>
 
     <% # these two tables are both cached using @cohort.memberships rather than %>
@@ -12,16 +11,16 @@
     <% # activated or de-activated %>
     <% cache cache_key_for_cohort(@cohort, @cohort.memberships, current_user, "active") do %>
       <%= render partial: "memberships/table", locals: {
-                                                memberships: @active_memberships,
-                                                header: "Active Members",
-                                                row_header: :user_name } %>
+        memberships: @active_memberships,
+        header: "Active Members",
+        row_header: :user_name } %>
     <% end %>
 
     <% cache cache_key_for_cohort(@cohort, @cohort.memberships, current_user, "inactive") do %>
       <%= render partial: "memberships/table", locals: {
-                                                memberships: @inactive_memberships,
-                                                header: "Inactive Members",
-                                                row_header: :user_name } %>
+        memberships: @inactive_memberships,
+        header: "Inactive Members",
+        row_header: :user_name } %>
     <% end %>
 
     <p>Admins:
@@ -30,12 +29,18 @@
         <%= link_to("(x)", toggle_admin_membership_path(user.memberships.find_by(cohort: @cohort)), method: :post, data: {confirm: "Are you sure you want to remove this admin?"}) if @is_admin %>,
       <% end %>
     </p>
-  </div>
-</section>
+  <% end %>
+<% end %>
 
-<section>
-  <h3 id="attendance"><a href="#attendance">Attendance</a></h3>
-  <div>
+<% attendances ||= @cohort.attendances %>
+<%= foldable_section_tag("Attendances") do %>
+  <%= section_summary_tag do %>
+    Total: <%= attendances.count %>
+    Present: <%= percent_of(attendances, "present") %>%,
+    Tardy: <%= percent_of(attendances, "tardy") %>%,
+    Absent: <%= percent_of(attendances, "absent") %>%
+  <% end %>
+  <%= section_content_tag do %>
     <% cache cache_key_for_cohort(@cohort, @events, @is_admin) do %>
       <%= render partial: "events/table", locals: {events: @events}%>
     <% end %>
@@ -46,12 +51,11 @@
         <%= render partial: "events/form", locals: {cohort: @cohort, event: Event.new} %>
       </section>
     <% end %>
-  </div>
-</section>
+  <% end %>
+<% end %>
 
-<section>
-  <h3 id="assignments"><a href="#assignments">Assignments</a></h3>
-  <div>
+<%= foldable_section_tag("Assignments") do %>
+  <%= section_content_tag do %>
     <% cache cache_key_for_cohort(@cohort, @assignments, @is_admin) do %>
       <%= render partial: "assignments/table", locals: {assignments: @assignments} %>
     <% end  %>
@@ -61,5 +65,5 @@
         <%= render partial: "assignments/form", locals: {cohort: @cohort, assignment: Assignment.new} %>
       </section>
     <% end %>
-  </div>
-</section>
+  <% end %>
+<% end %>

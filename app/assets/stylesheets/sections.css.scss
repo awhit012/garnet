@@ -3,21 +3,25 @@
     display:inline-block;
     transition:transform 0.2s;
     transform:rotateZ(0deg);
-    content:"\025B8";
+    content:'\025B8';
   }
-  &~div{
+  &~div .section_content{
     display:none;
   }
-  &:target:after{
-    transform:rotateZ(90deg);
-  }
-  &:target~div{
-    display:block;
-  }
+  // TODO: discuss use of target w/ Robin
+  // &:target:after{
+  //   transform:rotateZ(90deg);
+  // }
+  // &:target~div .section_content{
+  //   display:block;
+  // }
 }
 
-.folded {
+.unfolded {
   &:after{
     transform:rotateZ(90deg);
+  }
+  &~div .section_content{
+    display:block;
   }
 }

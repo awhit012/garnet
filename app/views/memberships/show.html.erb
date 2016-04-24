@@ -10,34 +10,37 @@
   <% end %>
 <% end %>
 
-
-<% if @observations %>
-  <section>
-    <h3 class="fold-without-anchor js-fold-without-anchor" id="observations"><a href="#observations"><%= @user.first_name %>'s Observations</a></h3>
-    <div>
+<%= foldable_section_tag("Observations") do %>
+  <%= section_summary_tag do %>
+    Average Observation: <%= @membership.average_observations %>
+  <% end %>
+  <%= section_content_tag do %>
+    <% if @observations %>
       <%= render @observations %>
-      <section>
-        <h4>New Observation</h4>
-        <%= render partial: "observations/form", locals: {user: @user, membership: @membership} %>
-      </section>
-    </div>
-  </section>
+    <% else %>
+      No Observations... yet.
+    <% end %>
+    <section>
+      <h4>New Observation</h4>
+      <%= render partial: "observations/form", locals: {user: @user, membership: @membership} %>
+    </section>
+  <% end %>
 <% end %>
 
-<%= render 'attendances/summary_table', attendances: @attendances, user: @user %>
-
-<% if @submissions.count > 0 %>
-  <section>
-    <h3 id="submissions" class="fold-without-anchor js-fold-without-anchor"><a href="#submissions"><%= @user.first_name %>'s Homework Submissions</a></h3>
-    <p>Percent Complete: <%= percent_of(@submissions, "complete") %>%</p>
-    <div>
-      <table data-sortable>
-        <%= render partial: "components/todo_table", locals: {collection: @submissions} %>
-      </table>
-    </div>
-  </section>
+<% attendances = @attendances %>
+<%= foldable_section_tag("Attendances") do %>
+  <%= section_summary_tag do %>
+    Present: <%= attendances.present.count %>, Tardy: <%= attendances.tardy.count %>, Absent: <%= attendances.absent.count %>
+  <% end %>
+  <%= section_content_table(attendances) %>
 <% end %>
 
+<%= foldable_section_tag("Submissions") do %>
+  <%= section_summary_tag do %>
+    Percent Complete: <%= percent_of(@submissions, "complete") %>%
+  <% end %>
+  <%= section_content_table(@submissions) %>
+<% end %>
 
 <section class="membership">
   <h3>Profile</h3>

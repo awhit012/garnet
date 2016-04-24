@@ -18,10 +18,12 @@
 
 //= require_tree .
 
+// Use foldable_section_tag helper
 $(".fold").on("click", function(e){
   // toggles url anchor
   // Actual "fold"ing is performed by CSS
   var hash = window.location.hash;
+  $(this).toggleClass('unfolded');
   if(hash == e.target.getAttribute('href')){
     e.preventDefault();
     window.location.hash = '#';
@@ -30,8 +32,8 @@ $(".fold").on("click", function(e){
 
 $(".js-fold-without-anchor").on("click", function(e){
   e.preventDefault();
-  $(this).toggleClass('folded');
-  $(this).siblings("div").toggle();
+  $(this).toggleClass('unfolded');
+  $(this).siblings("div .section_content").toggle();
 });
 
 var hash = window.location.hash
