@@ -24,17 +24,7 @@
   </section>
 <% end %>
 
-<% if @attendances.count > 0 %>
-  <section>
-    <h3 id="attendances" class="fold-without-anchor js-fold-without-anchor"><a href="#attendances"><%= @user.first_name %>'s Attendance</a></h3>
-    <p>Present: <%= @attendances.present.count %>, Tardy: <%= @attendances.tardy.count %>, Absent: <%= @attendances.absent.count %></p>
-    <div>
-      <table data-sortable>
-        <%= render partial: "components/todo_table", locals: {collection: @attendances} %>
-      </table>
-    <div>
-  </section>
-<% end %>
+<%= render 'attendances/summary_table', attendances: @attendances, user: @user %>
 
 <% if @submissions.count > 0 %>
   <section>
